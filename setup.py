@@ -9,8 +9,8 @@ setup(
     license = "MIT Licence",
 
     url = "https://github.com/guodongfan/text_tool_se",
-    author = "gm",
-    author_email = "1025304567@qq.com",
+    author = "",
+    author_email = "",
 
     packages = find_packages(),
     include_package_data = True,
