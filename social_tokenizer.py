@@ -149,6 +149,7 @@ class SocialTokenizer:
         censored = kwargs.get("censored", True)
         emphasis = kwargs.get("emphasis", True)
         numbers = kwargs.get("numbers", True)
+        functions = kwargs.get("functions", True)
 
         if urls:
             pipeline.append(self.regexes["URL"])
@@ -195,6 +196,9 @@ class SocialTokenizer:
 
         if emphasis:
             pipeline.append(self.wrap_non_matching(self.regexes["EMPHASIS"]))
+
+        if functions:
+            pipeline.append(self.wrap_non_matching(self.regexes['FUNCTION']))
 
         # terms like 'eco-friendly', 'go_to', 'john's' - maybe remove the ' or add a parameter for it
         # pipeline.append(r"(?:\b[a-zA-Z]+[a-zA-Z'\-_]+[a-zA-Z]+\b)")
@@ -264,7 +268,6 @@ class SocialTokenizer:
                     tokenized[idx] = self.regexes_[item].sub(lambda m: " " + "<" + item + ">" + " ", tok)
                     if tokenized[idx] != tok:
                         break
-
 
         return tokenized
 

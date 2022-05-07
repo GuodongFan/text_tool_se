@@ -14,8 +14,13 @@ class Processor:
         self.english_punctuations = string.punctuation
         self.punctuations_list = self.arabic_punctuations + self.english_punctuations
 
+    def __call__(self, text):
+        words = self.forward(text)
+
+        return words
+
     def forward(self, text):
-        text = self.convert_nwords(text)
+
         sentence = contractions.fix(text)
         doc = self.nlp(sentence)
 
@@ -33,7 +38,8 @@ class Processor:
 
         #s = ' '.join([token.lemma_ for token in doc])
         #s =
-        return ' '.join(tokens)
+        text = self.convert_nwords(' '.join(tokens))
+        return text
 
     def convert_nwords(self, text):
         out_text = None
@@ -79,4 +85,4 @@ class Processor:
 
 if __name__ == '__main__':
     processor = Processor()
-    print(processor.forward("<user> \u00a0\u00a0\u00a0\u00a0 I'll i dont tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js"))
+    print(processor.forward("The use of poll() inside the multi interface <user> \u00a0\u00a0\u00a0\u00a0 fgd(abc) I'll i dont tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js"))
