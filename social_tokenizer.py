@@ -3,7 +3,7 @@ import re
 
 import colorama
 from termcolor import colored
-
+from spacy.tokens import Doc
 from exmanager import ExManager
 
 
@@ -92,7 +92,7 @@ class SocialTokenizer:
     language such as hashtags, dates, times, emoticons and much more.
     """
 
-    def __init__(self, lowercase=False, verbose=False, debug=False, replace=True, **kwargs):
+    def __init__(self, lowercase=False, verbose=False, debug=False, replace=True, vocab=None, **kwargs):
         """
         Args:
             lowercase (bool): set to True in order to lowercase the text
@@ -130,6 +130,7 @@ class SocialTokenizer:
         pipeline = []
         self.regexes = ExManager().expressions
         self.regexes_ = ExManager().get_compiled()
+        self.vocab = vocab
 
         emojis = kwargs.get("emojis", True)
         urls = kwargs.get("urls", True)
@@ -290,6 +291,11 @@ class SocialTokenizer:
         if char.isupper():
             return next.islower() or prev.isalpha() and not prev.isupper()
         return char.isdigit()
+
+    def __call__(self, text):
+        words = self.tokenize(text)
+
+        return Doc(self.vocab, words=words)
 
 if __name__ == '__main__':
 

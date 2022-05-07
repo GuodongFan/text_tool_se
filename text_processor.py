@@ -8,7 +8,8 @@ import string
 class Processor:
     def __init__(self):
         self.nlp = spacy.load('en_core_web_sm')
-        self.tokenizer = SocialTokenizer(debug=False, verbose=False, lowercase=True)
+        self.tokenizer = SocialTokenizer(debug=False, verbose=False, lowercase=True, vocab=self.nlp.vocab)
+        self.nlp.tokenizer = self.tokenizer
         self.arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
         self.english_punctuations = string.punctuation
         self.punctuations_list = self.arabic_punctuations + self.english_punctuations
@@ -16,28 +17,19 @@ class Processor:
     def forward(self, text):
         text = self.convert_nwords(text)
         sentence = contractions.fix(text)
-        sentence = ' '.join(self.tokenizer.tokenize(sentence)).strip()
         doc = self.nlp(sentence)
+
         pos_tag = ['VERB', 'PROPN', 'AUX', 'NOUN']
 
         tokens = []
-        token_temp = []
-        mode = True
+
         for word in doc:
-            if mode == True:
-                if word.pos_ in pos_tag:
-                    tokens.append(word.lemma_)
-                elif word.pos_ == 'SPACE':
-                    mode = False
-                    token_temp = []
-                else:
-                    tokens.append(word.text)
+
+            if word.pos_ in pos_tag:
+                tokens.append(word.lemma_)
             else:
-                if word.pos_ == 'SPACE':
-                    mode = True
-                    tokens.append(''.join(token_temp))
-                else:
-                    token_temp.append(word.text)
+                tokens.append(word.text)
+
 
         #s = ' '.join([token.lemma_ for token in doc])
         #s =
@@ -87,4 +79,4 @@ class Processor:
 
 if __name__ == '__main__':
     processor = Processor()
-    print(processor.forward('tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js'))
+    print(processor.forward('<user> tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js'))
