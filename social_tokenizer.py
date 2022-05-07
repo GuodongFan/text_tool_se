@@ -246,6 +246,12 @@ class SocialTokenizer:
         if self.verbose:
             self.verbose_text(text, tokenized)
 
+        # 驼峰函数
+        new_tokenidzed = []
+        for token in tokenized:
+            new_tokenidzed.extend(self._split_camel_case(token))
+        tokenized = new_tokenidzed
+
         if self.lowercase:
             tokenized = [t.lower() for t in tokenized]
 
@@ -260,6 +266,30 @@ class SocialTokenizer:
 
 
         return tokenized
+
+    def _split_camel_case(self, string):
+        tokens = []
+        token = []
+        for prev, char, next in zip(' ' + string, string, string[1:] + ' '):
+            #print(prev, char, next)
+            if self._is_camel_case_boundary(prev, char, next):
+                if token:
+                    tokens.append(''.join(token))
+                token = [char]
+            else:
+                token.append(char)
+            #print('token', token)
+            #print('tokens', tokens)
+        if token:
+            tokens.append(''.join(token))
+        return tokens
+
+    def _is_camel_case_boundary(self, prev, char, next):
+        if prev.isdigit():
+            return not char.isdigit()
+        if char.isupper():
+            return next.islower() or prev.isalpha() and not prev.isupper()
+        return char.isdigit()
 
 if __name__ == '__main__':
 
