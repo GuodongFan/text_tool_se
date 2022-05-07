@@ -64,13 +64,13 @@ class Processor:
         nword = ''.join(nword.split())
         if len(nword) == 0:
             print(word + ' unconvertable!')
-            nword = "[UKN]"
+            nword = "<UKN>"
         elif word.startswith(nword) and len(nword) != len(word):
             print(word + ' + unconvertable!')
-            nword += " [UKN]"
+            nword += " <UKN>"
         elif word.endswith(nword) and len(nword) != len(word):
             print(word + ' + unconvertable!')
-            nword = "[UKN] " + nword
+            nword = "<UKN> " + nword
         return nword
 
     def remove_punctuations(self, text):
@@ -79,4 +79,4 @@ class Processor:
 
 if __name__ == '__main__':
     processor = Processor()
-    print(processor.forward('<user> tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js'))
+    print(processor.forward("<user> \u00a0\u00a0\u00a0\u00a0 I'll i dont tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js"))
