@@ -39,7 +39,7 @@ class Processor:
         #s = ' '.join([token.lemma_ for token in doc])
         #s =
         text = self.convert_nwords(' '.join(tokens))
-        return text
+        return text.strip()
 
     def convert_nwords(self, text):
         out_text = None
@@ -69,13 +69,13 @@ class Processor:
         nword = unicodedata.normalize('NFKD', word).encode('ascii', 'ignore').decode("ascii").strip()
         nword = ''.join(nword.split())
         if len(nword) == 0:
-            print(word + ' unconvertable!')
+            #print(word + ' unconvertable!')
             nword = "<UKN>"
         elif word.startswith(nword) and len(nword) != len(word):
-            print(word + ' + unconvertable!')
+            #print(word + ' + unconvertable!')
             nword += " <UKN>"
         elif word.endswith(nword) and len(nword) != len(word):
-            print(word + ' + unconvertable!')
+            #print(word + ' + unconvertable!')
             nword = "<UKN> " + nword
         return nword
 
@@ -85,4 +85,4 @@ class Processor:
 
 if __name__ == '__main__':
     processor = Processor()
-    print(processor.forward("The use of poll() inside the multi interface <user> \u00a0\u00a0\u00a0\u00a0 fgd(abc) I'll i dont tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js"))
+    print(processor.forward("The use of fgd.poll() //fgd /fgd/qq.txt /fgd/dd3dd2.js inside the multi interface <user> \u00a0\u00a0\u00a0\u00a0 fgd(abc) I'll i dont tests\\cases\\conformance\\types\\typeRelationships\\typeAndMemberIdentity\\objectTypesIdentityWithConstructSignatures2.js"))
